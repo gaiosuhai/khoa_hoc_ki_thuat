@@ -1,0 +1,1143 @@
+<html lang="vi"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Làng Trò Chơi Dân Gian Số</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts hỗ trợ tiếng Việt đẹp mắt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&amp;family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&amp;display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'giay-do': '#FBF6EC',
+                        'giay-dam': '#F2E7D0',
+                        'do-son': '#9E1B1B',
+                        'do-tham': '#7A1212',
+                        'vang-dong': '#D4AF37',
+                        'vang-sang': '#F4C430',
+                        'nau-go': '#2C1E16',
+                        'nau-nhat': '#5D4A3E',
+                        'cat-tri': '#00797C',     // Rèn Trí (Teal)
+                        'cat-suc': '#D3543E',     // Rèn Sức (Terracotta Red)
+                        'cat-kheo': '#E0A526',    // Rèn Khéo (Golden Yellow)
+                        'cat-doanket': '#2D6A4F', // Đoàn Kết (Forest Green)
+                        'cat-kynang': '#0F2942'   // Kỹ Năng Đội (Deep Navy Blue)
+                    },
+                    fontFamily: {
+                        'co-dien': ['"Playfair Display"', 'serif'],
+                        'hien-dai': ['"Be Vietnam Pro"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FBF6EC;
+            background-image: 
+                radial-gradient(rgba(212, 175, 55, 0.14) 1px, transparent 0),
+                radial-gradient(rgba(158, 27, 27, 0.05) 1px, #FBF6EC 0);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: #2C1E16;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            overflow-x: hidden;
+        }
+
+        @keyframes spinDrum {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-drum {
+            animation: spinDrum 140s linear infinite;
+        }
+
+        .brocade-border {
+            border: 3px solid #D4AF37;
+            box-shadow: 
+                inset 0 0 0 3px #FBF6EC,
+                inset 0 0 0 5px #9E1B1B,
+                0 12px 28px -6px rgba(44, 30, 22, 0.22);
+        }
+
+        .category-frame {
+            background: rgba(255, 253, 248, 0.94);
+            backdrop-filter: blur(6px);
+            border: 2px solid #E6D8BE;
+            border-radius: 1.5rem;
+            box-shadow: 0 6px 20px -4px rgba(44, 30, 22, 0.08);
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-frame:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -6px rgba(44, 30, 22, 0.15);
+        }
+
+        .accent-pill {
+            width: 14px;
+            border-radius: 9999px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .category-frame:hover .accent-pill {
+            width: 18px;
+        }
+
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .accordion-content.open {
+            grid-template-rows: 1fr;
+        }
+        .accordion-inner {
+            overflow: hidden;
+        }
+
+        .subitem-card {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FAF3E3 100%);
+            border: 1.5px solid #E2D1B3;
+            border-radius: 1.15rem;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+        .subitem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(44, 30, 22, 0.18);
+            border-color: #D4AF37;
+        }
+
+        #petal-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 35;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F2E7D0; }
+        ::-webkit-scrollbar-thumb { background: #9E1B1B; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.bottom-5{bottom:1.25rem}.right-5{right:1.25rem}.z-0{z-index:0}.z-10{z-index:10}.z-20{z-index:20}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-3{margin-top:0.75rem;margin-bottom:0.75rem}.mb-0\.5{margin-bottom:0.125rem}.mb-7{margin-bottom:1.75rem}.mt-auto{margin-top:auto}.mb-2\.5{margin-bottom:0.625rem}.mr-1{margin-right:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-3{margin-top:0.75rem}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:0.375rem}.h-14{height:3.5rem}.h-\[820px\]{height:820px}.h-full{height:100%}.h-20{height:5rem}.h-16{height:4rem}.h-11{height:2.75rem}.h-9{height:2.25rem}.max-h-\[78vh\]{max-height:78vh}.min-h-screen{min-height:100vh}.w-14{width:3.5rem}.w-\[820px\]{width:820px}.w-full{width:100%}.w-20{width:5rem}.w-16{width:4rem}.w-11{width:2.75rem}.w-9{width:2.25rem}.max-w-5xl{max-width:64rem}.max-w-6xl{max-width:72rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.flex-grow{flex-grow:1}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.items-baseline{align-items:baseline}.items-stretch{align-items:stretch}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-3\.5{gap:0.875rem}.gap-4{gap:1rem}.gap-1{gap:0.25rem}.gap-2\.5{gap:0.625rem}.gap-x-5{column-gap:1.25rem}.gap-y-1{row-gap:0.25rem}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.whitespace-nowrap{white-space:nowrap}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-2{border-width:2px}.border-4{border-width:4px}.border-0{border-width:0px}.border-b-2{border-bottom-width:2px}.border-b-4{border-bottom-width:4px}.border-t-4{border-top-width:4px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-vang-dong{--tw-border-opacity:1;border-color:rgb(212 175 55 / var(--tw-border-opacity, 1))}.border-vang-dong\/40{border-color:rgb(212 175 55 / 0.4)}.border-vang-dong\/50{border-color:rgb(212 175 55 / 0.5)}.border-vang-sang{--tw-border-opacity:1;border-color:rgb(244 196 48 / var(--tw-border-opacity, 1))}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.border-amber-300{--tw-border-opacity:1;border-color:rgb(252 211 77 / var(--tw-border-opacity, 1))}.border-stone-200{--tw-border-opacity:1;border-color:rgb(231 229 228 / var(--tw-border-opacity, 1))}.border-vang-dong\/30{border-color:rgb(212 175 55 / 0.3)}.bg-\[\#18110B\]{--tw-bg-opacity:1;background-color:rgb(24 17 11 / var(--tw-bg-opacity, 1))}.bg-black\/25{background-color:rgb(0 0 0 / 0.25)}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-giay-do{--tw-bg-opacity:1;background-color:rgb(251 246 236 / var(--tw-bg-opacity, 1))}.bg-nau-go{--tw-bg-opacity:1;background-color:rgb(44 30 22 / var(--tw-bg-opacity, 1))}.bg-nau-go\/60{background-color:rgb(44 30 22 / 0.6)}.bg-nau-go\/70{background-color:rgb(44 30 22 / 0.7)}.bg-nau-go\/90{background-color:rgb(44 30 22 / 0.9)}.bg-vang-dong\/20{background-color:rgb(212 175 55 / 0.2)}.bg-vang-sang{--tw-bg-opacity:1;background-color:rgb(244 196 48 / var(--tw-bg-opacity, 1))}.bg-do-son\/80{background-color:rgb(158 27 27 / 0.8)}.bg-black\/70{background-color:rgb(0 0 0 / 0.7)}.bg-cat-tri\/90{background-color:rgb(0 121 124 / 0.9)}.bg-do-son{--tw-bg-opacity:1;background-color:rgb(158 27 27 / var(--tw-bg-opacity, 1))}.bg-emerald-100{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.bg-\[\#FAF4E6\]\/60{background-color:rgb(250 244 230 / 0.6)}.bg-amber-100{--tw-bg-opacity:1;background-color:rgb(254 243 199 / var(--tw-bg-opacity, 1))}.bg-emerald-700{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.bg-stone-100{--tw-bg-opacity:1;background-color:rgb(245 245 244 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-do-tham{--tw-gradient-from:#7A1212 var(--tw-gradient-from-position);--tw-gradient-to:rgb(122 18 18 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-vang-sang{--tw-gradient-from:#F4C430 var(--tw-gradient-from-position);--tw-gradient-to:rgb(244 196 48 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-do-son{--tw-gradient-to:rgb(158 27 27 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #9E1B1B var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-emerald-500{--tw-gradient-to:rgb(16 185 129 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #10b981 var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-do-tham{--tw-gradient-to:#7A1212 var(--tw-gradient-to-position)}.to-vang-sang{--tw-gradient-to:#F4C430 var(--tw-gradient-to-position)}.object-contain{object-fit:contain}.p-2{padding:0.5rem}.p-8{padding:2rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.pt-2{padding-top:0.5rem}.pb-6{padding-bottom:1.5rem}.text-center{text-align:center}.font-co-dien{font-family:"Playfair Display", serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-\[11px\]{font-size:11px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-do-son{--tw-text-opacity:1;color:rgb(158 27 27 / var(--tw-text-opacity, 1))}.text-giay-do{--tw-text-opacity:1;color:rgb(251 246 236 / var(--tw-text-opacity, 1))}.text-giay-do\/75{color:rgb(251 246 236 / 0.75)}.text-nau-go{--tw-text-opacity:1;color:rgb(44 30 22 / var(--tw-text-opacity, 1))}.text-vang-sang{--tw-text-opacity:1;color:rgb(244 196 48 / var(--tw-text-opacity, 1))}.text-vang-sang\/95{color:rgb(244 196 48 / 0.95)}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-giay-do\/85{color:rgb(251 246 236 / 0.85)}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6 / var(--tw-text-opacity, 1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15 / var(--tw-text-opacity, 1))}.text-nau-nhat{--tw-text-opacity:1;color:rgb(93 74 62 / var(--tw-text-opacity, 1))}.text-stone-500{--tw-text-opacity:1;color:rgb(120 113 108 / var(--tw-text-opacity, 1))}.opacity-\[0\.065\]{opacity:0.065}.opacity-0{opacity:0}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.drop-shadow{--tw-drop-shadow:drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.selection\:bg-do-son *::selection{--tw-bg-opacity:1;background-color:rgb(158 27 27 / var(--tw-bg-opacity, 1))}.selection\:text-vang-sang *::selection{--tw-text-opacity:1;color:rgb(244 196 48 / var(--tw-text-opacity, 1))}.selection\:bg-do-son::selection{--tw-bg-opacity:1;background-color:rgb(158 27 27 / var(--tw-bg-opacity, 1))}.selection\:text-vang-sang::selection{--tw-text-opacity:1;color:rgb(244 196 48 / var(--tw-text-opacity, 1))}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-nau-go:hover{--tw-bg-opacity:1;background-color:rgb(44 30 22 / var(--tw-bg-opacity, 1))}.hover\:bg-yellow-300:hover{--tw-bg-opacity:1;background-color:rgb(253 224 71 / var(--tw-bg-opacity, 1))}.hover\:bg-do-tham:hover{--tw-bg-opacity:1;background-color:rgb(122 18 18 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-600:hover{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.hover\:brightness-110:hover{--tw-brightness:brightness(1.1);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.group:hover .group-hover\:bg-giay-dam{--tw-bg-opacity:1;background-color:rgb(242 231 208 / var(--tw-bg-opacity, 1))}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:justify-start{justify-content:flex-start}.sm\:gap-5{gap:1.25rem}.sm\:p-4{padding:1rem}.sm\:p-5{padding:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-left{text-align:left}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:inline{display:inline}.md\:h-\[1150px\]{height:1150px}.md\:w-\[1150px\]{width:1150px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:p-6{padding:1.5rem}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}}@media (min-width: 1024px){.lg\:flex-row{flex-direction:row}}</style></head>
+<body class="min-h-screen flex flex-col relative selection:bg-do-son selection:text-vang-sang">
+
+    <canvas id="petal-canvas" width="1280" height="593"></canvas>
+
+    <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0 opacity-[0.065]">
+        <svg class="w-[820px] h-[820px] md:w-[1150px] md:h-[1150px] animate-drum text-do-son" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="200" cy="200" r="195" stroke="currentColor" stroke-width="4"></circle>
+            <circle cx="200" cy="200" r="184" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4"></circle>
+            <circle cx="200" cy="200" r="164" stroke="currentColor" stroke-width="3"></circle>
+            <circle cx="200" cy="200" r="138" stroke="currentColor" stroke-width="1.5"></circle>
+            <circle cx="200" cy="200" r="112" stroke="currentColor" stroke-width="3"></circle>
+            <circle cx="200" cy="200" r="82" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 3"></circle>
+            <circle cx="200" cy="200" r="54" stroke="currentColor" stroke-width="2.5"></circle>
+            <polygon points="200,152 208,182 234,166 218,192 248,200 218,208 234,234 208,218 200,248 192,218 166,234 182,208 152,200 182,192 166,166 192,182" fill="currentColor"></polygon>
+            <circle cx="200" cy="200" r="15" fill="#FBF6EC" stroke="currentColor" stroke-width="3"></circle>
+            <g stroke="currentColor" stroke-width="2" fill="currentColor">
+                <path d="M200 24 L210 42 L200 36 L190 42 Z"></path>
+                <path d="M200 376 L210 358 L200 364 L190 358 Z"></path>
+                <path d="M24 200 L42 190 L36 200 L42 210 Z"></path>
+                <path d="M376 200 L358 190 L364 200 L358 210 Z"></path>
+                <path d="M76 76 L95 82 L86 86 L82 95 Z"></path>
+                <path d="M324 324 L305 318 L314 314 L318 305 Z"></path>
+                <path d="M324 76 L318 95 L314 86 L305 82 Z"></path>
+                <path d="M76 324 L82 305 L86 314 L95 318 Z"></path>
+            </g>
+        </svg>
+    </div>
+
+    <header class="relative z-20 bg-gradient-to-r from-do-tham via-do-son to-do-tham text-giay-do border-b-4 border-vang-dong shadow-xl">
+        <div class="h-1.5 w-full bg-gradient-to-r from-vang-sang via-emerald-500 to-vang-sang"></div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex flex-col lg:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5 text-center sm:text-left">
+                <div class="w-14 h-14 rounded-2xl bg-vang-dong/20 border-2 border-vang-sang flex items-center justify-center shrink-0 shadow-inner">
+                    <span class="text-3xl">🏮</span>
+                </div>
+                <div>
+                    <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-0.5">
+                        <span class="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider bg-vang-sang text-nau-go rounded-full">
+                            Di Sản Văn Hóa &amp; Sức Trẻ Việt
+                        </span>
+                        <span id="global-counter" class="text-xs font-semibold text-vang-sang/95 bg-black/25 px-2.5 py-0.5 rounded-full border border-vang-dong/40">Đã nạp: 0/8 Video • 6/6 Game</span>
+                    </div>
+                    <h1 class="font-co-dien text-xl sm:text-2xl md:text-3xl font-extrabold tracking-wide text-vang-sang drop-shadow">
+                        LÀNG TRÒ CHƠI DÂN GIAN SỐ
+                    </h1>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-2">
+                <button id="btn-header-save" onclick="handleSaveAll(true)" class="relative px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 border-2 border-vang-sang text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow-lg transition cursor-pointer" title="Lưu toàn bộ Video và Game đã nạp vào trình duyệt">
+                    <i id="header-save-icon" class="fa-solid fa-circle-check"></i>
+                    <span id="header-save-label">Đã Lưu (Save)</span>
+                </button>
+
+                <button id="btn-export-html" onclick="exportPackagedHtml()" class="px-3.5 py-2 rounded-xl bg-vang-sang hover:bg-yellow-300 text-nau-go font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow transition cursor-pointer" title="Đóng gói toàn bộ Video &amp; Game đã nạp thành 1 file .html duy nhất">
+                    <i class="fa-solid fa-file-export"></i>
+                    <span>Xuất HTML Đóng Gói</span>
+                </button>
+
+                <button onclick="togglePetals()" class="px-3 py-2 rounded-xl bg-nau-go/60 hover:bg-nau-go border border-vang-dong text-vang-sang text-xs sm:text-sm font-medium flex items-center gap-1.5 transition cursor-pointer" title="Bật/Tắt hiệu ứng hoa mai rơi">
+                    <i class="fa-solid fa-fan"></i>
+                    <span>Hoa Rơi</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
+        
+        <div class="text-center mb-7 space-y-1.5">
+            <p class="text-xs sm:text-sm font-bold uppercase tracking-widest text-do-son">
+                ❖ Khám Phá 5 Nhóm Giá Trị Rèn Luyện Truyền Thống ❖
+            </p>
+        </div>
+
+        <div id="categories-container" class="space-y-4">
+                <section class="category-frame" style="border-color: #E6D8BE;">
+                    <div onclick="toggleCategory('ren-tri')" class="p-4 sm:p-5 flex items-stretch gap-4 sm:gap-5 cursor-pointer select-none group">
+                        <div class="accent-pill" style="background-color: #00797C;"></div>
+                        <div class="flex-grow flex flex-col justify-center py-0.5">
+                            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                                <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wide" style="color: #00797C;">
+                                    RÈN TRÍ
+                                </h2>
+                                <span class="text-sm sm:text-base font-bold text-nau-go">
+                                    Ô ăn quan  •  Cờ gánh  •  Cờ nhào
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-nau-nhat mt-1.5">Tư duy logic, tính toán, quan sát, chiến thuật (Chỉ Game)</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap" style="background-color: #00797C15; color: #00797C; border-color: #00797C40;">
+                                <i class="fa-solid fa-gamepad mr-1"></i>Chỉ Game (3/3)
+                            </span>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 bg-giay-do group-hover:bg-giay-dam" style="color: #00797C;">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-content open">
+                        <div class="accordion-inner">
+                            <div class="px-4 sm:px-6 pb-6 pt-2 border-t border-dashed border-vang-dong/50 bg-[#FAF4E6]/60">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+                
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🏮</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Ô ăn quan</h3>
+                                        <span class="text-[11px] text-nau-nhat">Tính toán &amp; Chiến thuật</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="openStage('ren-tri', 'o-an-quan', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: #00797C;"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">♟️</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Cờ gánh</h3>
+                                        <span class="text-[11px] text-nau-nhat">Vây bắt &amp; Tư duy bàn cờ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="openStage('ren-tri', 'co-ganh', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: #00797C;"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🎯</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Cờ nhào</h3>
+                                        <span class="text-[11px] text-nau-nhat">Phản xạ &amp; Quan sát nhanh</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="openStage('ren-tri', 'co-nhao', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: #00797C;"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>
+                        </div>
+                    </div></div></div></div></div></section>
+                <section class="category-frame" style="border-color: #E6D8BE;">
+                    <div onclick="toggleCategory('ren-suc')" class="p-4 sm:p-5 flex items-stretch gap-4 sm:gap-5 cursor-pointer select-none group">
+                        <div class="accent-pill" style="background-color: #D3543E;"></div>
+                        <div class="flex-grow flex flex-col justify-center py-0.5">
+                            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                                <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wide" style="color: #D3543E;">
+                                    RÈN SỨC
+                                </h2>
+                                <span class="text-sm sm:text-base font-bold text-nau-go">
+                                    Kéo co  •  Nhảy dây  •  Đi cà kheo
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-nau-nhat mt-1.5">Sức khỏe, thăng bằng, phối hợp vận động (Chỉ Video)</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap" style="background-color: #D3543E15; color: #D3543E; border-color: #D3543E40;">
+                                <i class="fa-solid fa-film mr-1"></i>Chỉ Video (0/3)
+                            </span>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 bg-giay-do group-hover:bg-giay-dam" style="color: #D3543E;">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-content open">
+                        <div class="accordion-inner">
+                            <div class="px-4 sm:px-6 pb-6 pt-2 border-t border-dashed border-vang-dong/50 bg-[#FAF4E6]/60">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+                
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🪢</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Kéo co</h3>
+                                        <span class="text-[11px] text-nau-nhat">Sức mạnh tập thể</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('ren-suc', 'keo-co', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">〰️</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Nhảy dây</h3>
+                                        <span class="text-[11px] text-nau-nhat">Nhịp điệu &amp; Sức bền</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('ren-suc', 'nhay-day', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🎋</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Đi cà kheo</h3>
+                                        <span class="text-[11px] text-nau-nhat">Giữ thăng bằng &amp; Khéo léo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('ren-suc', 'di-ca-kheo', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div></div></div></div></div></section>
+                <section class="category-frame" style="border-color: #E6D8BE;">
+                    <div onclick="toggleCategory('ren-kheo')" class="p-4 sm:p-5 flex items-stretch gap-4 sm:gap-5 cursor-pointer select-none group">
+                        <div class="accent-pill" style="background-color: #E0A526;"></div>
+                        <div class="flex-grow flex flex-col justify-center py-0.5">
+                            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                                <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wide" style="color: #E0A526;">
+                                    RÈN KHÉO
+                                </h2>
+                                <span class="text-sm sm:text-base font-bold text-nau-go">
+                                    Banh đũa  •  Ném vòng
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-nau-nhat mt-1.5">Khéo léo, phản xạ, phối hợp tay – mắt (Chỉ Video)</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap" style="background-color: #E0A52615; color: #E0A526; border-color: #E0A52640;">
+                                <i class="fa-solid fa-film mr-1"></i>Chỉ Video (0/2)
+                            </span>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 bg-giay-do group-hover:bg-giay-dam" style="color: #E0A526;">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-content open">
+                        <div class="accordion-inner">
+                            <div class="px-4 sm:px-6 pb-6 pt-2 border-t border-dashed border-vang-dong/50 bg-[#FAF4E6]/60">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🥢</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Banh đũa</h3>
+                                        <span class="text-[11px] text-nau-nhat">Nhanh tay &amp; Tinh mắt</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('ren-kheo', 'banh-dua', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">⭕</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Ném vòng</h3>
+                                        <span class="text-[11px] text-nau-nhat">Ước lượng &amp; Chuẩn xác</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('ren-kheo', 'nem-vong', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div></div></div></div></div></section>
+                <section class="category-frame" style="border-color: #E6D8BE;">
+                    <div onclick="toggleCategory('doan-ket')" class="p-4 sm:p-5 flex items-stretch gap-4 sm:gap-5 cursor-pointer select-none group">
+                        <div class="accent-pill" style="background-color: #2D6A4F;"></div>
+                        <div class="flex-grow flex flex-col justify-center py-0.5">
+                            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                                <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wide" style="color: #2D6A4F;">
+                                    ĐOÀN KẾT
+                                </h2>
+                                <span class="text-sm sm:text-base font-bold text-nau-go">
+                                    Rồng rắn lên mây  •  Cướp cờ  •  Bịt mắt bắt dê
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-nau-nhat mt-1.5">Giao tiếp, hợp tác, tin tưởng, làm việc nhóm (Chỉ Video)</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap" style="background-color: #2D6A4F15; color: #2D6A4F; border-color: #2D6A4F40;">
+                                <i class="fa-solid fa-film mr-1"></i>Chỉ Video (0/3)
+                            </span>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 bg-giay-do group-hover:bg-giay-dam" style="color: #2D6A4F;">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-content open">
+                        <div class="accordion-inner">
+                            <div class="px-4 sm:px-6 pb-6 pt-2 border-t border-dashed border-vang-dong/50 bg-[#FAF4E6]/60">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+                
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🐉</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Rồng rắn lên mây</h3>
+                                        <span class="text-[11px] text-nau-nhat">Đồng dao &amp; Gắn kết</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('doan-ket', 'rong-ran-len-may', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🚩</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Cướp cờ</h3>
+                                        <span class="text-[11px] text-nau-nhat">Chiến thuật đồng đội</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('doan-ket', 'cuop-co', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🙈</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Bịt mắt bắt dê</h3>
+                                        <span class="text-[11px] text-nau-nhat">Lắng nghe &amp; Phối hợp</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="startFileSelect('doan-ket', 'bit-mat-bat-de', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>
+                        </div>
+                    </div></div></div></div></div></section>
+                <section class="category-frame" style="border-color: #E6D8BE;">
+                    <div onclick="toggleCategory('ky-nang-doi')" class="p-4 sm:p-5 flex items-stretch gap-4 sm:gap-5 cursor-pointer select-none group">
+                        <div class="accent-pill" style="background-color: #0F2942;"></div>
+                        <div class="flex-grow flex flex-col justify-center py-0.5">
+                            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                                <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wide" style="color: #0F2942;">
+                                    KỸ NĂNG ĐỘI
+                                </h2>
+                                <span class="text-sm sm:text-base font-bold text-nau-go">
+                                    Giải mật thư  •  Semaphore  •  Morse
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-nau-nhat mt-1.5">Suy luận, quan sát, truyền tin, giải quyết vấn đề (Chỉ Game)</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap" style="background-color: #0F294215; color: #0F2942; border-color: #0F294240;">
+                                <i class="fa-solid fa-gamepad mr-1"></i>Chỉ Game (3/3)
+                            </span>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 bg-giay-do group-hover:bg-giay-dam" style="color: #0F2942;">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-content open">
+                        <div class="accordion-inner">
+                            <div class="px-4 sm:px-6 pb-6 pt-2 border-t border-dashed border-vang-dong/50 bg-[#FAF4E6]/60">
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+                
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">📜</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Giải mật thư</h3>
+                                        <span class="text-[11px] text-nau-nhat">Giải mã &amp; Suy luận logic</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="openStage('ky-nang-doi', 'giai-mat-thu', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: #0F2942;"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">🏳️</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Semaphore</h3>
+                                        <span class="text-[11px] text-nau-nhat">Truyền tin bằng cờ hiệu</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="openStage('ky-nang-doi', 'semaphore', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: #0F2942;"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>
+                        </div>
+                    </div>
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">📡</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">Morse</h3>
+                                        <span class="text-[11px] text-nau-nhat">Tín hiệu Tích – Tè chuẩn xác</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span></div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            <button onclick="openStage('ky-nang-doi', 'morse', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: #0F2942;"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>
+                        </div>
+                    </div></div></div></div></div></section></div>
+
+    </main>
+
+    <footer class="relative z-10 bg-nau-go text-giay-do border-t-4 border-vang-dong py-5 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center space-y-1">
+            <p class="font-co-dien font-bold text-sm sm:text-base text-vang-sang tracking-wide">
+                GÌN GIỮ BẢN SẮC DÂN GIAN • RÈN LUYỆN BẢN LĨNH TUỔI TRẺ VIỆT NAM
+            </p>
+            <p class="text-xs text-giay-do/75">
+                Không gian trình diễn tương tác trực tiếp • Dữ liệu Video &amp; Game được lưu bền vững trên trình duyệt
+            </p>
+        </div>
+    </footer>
+
+    <!-- MODAL TRÌNH DIỄN -->
+    <div id="stage-modal" class="fixed inset-0 z-50 hidden bg-nau-go/90 backdrop-blur-md flex flex-col p-2 sm:p-4 md:p-6">
+        <div id="stage-container" class="flex-grow flex flex-col bg-giay-do rounded-2xl border-4 border-vang-dong shadow-2xl overflow-hidden max-w-6xl w-full mx-auto">
+            
+            <div id="stage-header" class="bg-gradient-to-r from-do-tham via-do-son to-do-tham text-giay-do px-4 py-3 flex flex-wrap items-center justify-between gap-2 border-b-2 border-vang-dong">
+                <div class="flex items-center gap-3">
+                    <span id="stage-emoji" class="text-2xl sm:text-3xl">🏮</span>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span id="stage-cat-badge" class="px-2.5 py-0.5 text-[11px] font-bold uppercase rounded-full bg-vang-sang text-nau-go">
+                                RÈN TRÍ
+                            </span>
+                            <h3 id="stage-title" class="font-co-dien font-bold text-lg sm:text-xl text-vang-sang">
+                                Tên Trò Chơi
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <span id="stage-mode-badge" class="px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 bg-vang-sang text-nau-go shadow">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>Trình Diễn Game</span>
+                    </span>
+
+                    <button id="stage-btn-reload" onclick="reloadStageGame()" class="hidden px-3 py-1.5 rounded-xl bg-nau-go/70 hover:bg-nau-go text-vang-sang border border-vang-dong/50 text-xs sm:text-sm font-medium flex items-center gap-1.5 cursor-pointer" title="Khởi động lại ván chơi">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span class="hidden md:inline">Chơi Lại</span>
+                    </button>
+
+                    <button onclick="toggleStageFullscreen()" class="px-3.5 py-1.5 rounded-xl bg-nau-go/70 hover:bg-nau-go text-vang-sang border border-vang-dong/50 text-xs sm:text-sm font-medium flex items-center gap-1.5 cursor-pointer" title="Phóng to toàn màn hình">
+                        <i class="fa-solid fa-expand"></i>
+                        <span class="hidden md:inline">Toàn Màn Hình</span>
+                    </button>
+
+                    <button onclick="closeStageModal()" class="px-3.5 py-1.5 rounded-xl bg-black/60 hover:bg-black text-white border border-white/20 text-xs sm:text-sm font-bold flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span>Đóng</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-grow relative bg-[#18110B] flex items-center justify-center overflow-hidden">
+                <!-- Khung xem Video -->
+                <div id="stage-video-view" class="w-full h-full flex items-center justify-center hidden">
+                    <video id="stage-video-player" controls="" class="w-full h-full max-h-[78vh] object-contain outline-none hidden">
+                        Trình duyệt không hỗ trợ phát video.
+                    </video>
+                    <div id="stage-video-empty" class="p-8 text-center text-giay-do max-w-md space-y-4">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-do-son/80 border-2 border-vang-sang flex items-center justify-center text-4xl shadow-lg">🎬</div>
+                        <h4 class="font-co-dien text-xl font-bold text-vang-sang">Chưa Nạp Video Giới Thiệu</h4>
+                        <p class="text-sm text-giay-do/85 leading-relaxed">Bạn chưa tải lên video cho mục này. Hãy chọn tệp video (.mp4, .webm...) từ máy tính!</p>
+                        <div class="pt-2">
+                            <button onclick="triggerDirectUpload('video')" class="px-5 py-2.5 rounded-xl bg-vang-sang hover:bg-yellow-300 text-nau-go font-bold text-sm inline-flex items-center gap-2 shadow-lg cursor-pointer transition">
+                                <i class="fa-solid fa-upload"></i> Chọn File Video Từ Máy Tính
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Khung chơi Game -->
+                <div id="stage-game-view" class="w-full h-full flex items-center justify-center hidden">
+                    <iframe id="stage-game-iframe" class="w-full h-full border-0 hidden" sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups"></iframe>
+                    <div id="stage-game-empty" class="p-8 text-center text-giay-do max-w-md space-y-4">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-cat-tri/90 border-2 border-vang-sang flex items-center justify-center text-4xl shadow-lg">🎮</div>
+                        <h4 class="font-co-dien text-xl font-bold text-vang-sang">Chưa Nạp File Game</h4>
+                        <p class="text-sm text-giay-do/85 leading-relaxed">Hãy nạp tệp trò chơi <b>.html</b> của mục này từ máy tính để trải nghiệm!</p>
+                        <div class="pt-2">
+                            <button onclick="triggerDirectUpload('game')" class="px-5 py-2.5 rounded-xl bg-vang-sang hover:bg-yellow-300 text-nau-go font-bold text-sm inline-flex items-center gap-2 shadow-lg cursor-pointer transition">
+                                <i class="fa-solid fa-file-code"></i> Chọn File Game Từ Máy Tính
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XÁC NHẬN LƯU -->
+    <div id="save-summary-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="brocade-border bg-giay-do rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
+            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-100 border-2 border-emerald-500 flex items-center justify-center text-3xl text-emerald-700 shadow">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 class="font-co-dien font-bold text-xl text-do-son">Đã Lưu Dữ Liệu An Toàn!</h3>
+            <p id="save-summary-text" class="text-sm text-nau-go leading-relaxed">Đã lưu thành công vào bộ nhớ trình duyệt.</p>
+            <div class="flex flex-col sm:flex-row gap-2 pt-2">
+                <button onclick="closeSaveSummaryModal(); exportPackagedHtml();" class="flex-1 py-2.5 px-3 rounded-xl bg-vang-sang hover:bg-yellow-300 text-nau-go font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow cursor-pointer transition">
+                    <i class="fa-solid fa-download"></i><span>Xuất File HTML Đóng Gói</span>
+                </button>
+                <button onclick="closeSaveSummaryModal()" class="flex-1 py-2.5 px-3 rounded-xl bg-do-son hover:bg-do-tham text-vang-sang font-bold text-xs sm:text-sm cursor-pointer transition">Hoàn Tất</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="universal-file-input" class="hidden" accept=".html,.htm,text/html">
+    <div id="toast-box" class="fixed bottom-5 right-5 z-50 transform transition-all duration-300 pointer-events-none">
+        <div class="bg-nau-go text-vang-sang border-2 border-vang-dong px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm font-medium">
+            <i class="fa-solid fa-circle-check text-vang-sang"></i>
+            <span id="toast-msg">Đang đóng gói toàn bộ Video &amp; Game vào 1 file HTML duy nhất...</span>
+        </div>
+    </div>
+
+    <script id="embedded-exhibition-data" type="application/json">{}</script>
+
+    <script>
+        const categoriesData = [
+            {
+                id: 'ren-tri',
+                name: 'RÈN TRÍ',
+                desc: 'Tư duy logic, tính toán, quan sát, chiến thuật (Chỉ Game)',
+                color: '#00797C',
+                items: [
+                    { id: 'o-an-quan', name: 'Ô ăn quan', desc: 'Tính toán & Chiến thuật', icon: '🏮', hasGame: true },
+                    { id: 'co-ganh', name: 'Cờ gánh', desc: 'Vây bắt & Tư duy bàn cờ', icon: '♟️', hasGame: true },
+                    { id: 'co-nhao', name: 'Cờ nhào', desc: 'Phản xạ & Quan sát nhanh', icon: '🎯', hasGame: true }
+                ]
+            },
+            {
+                id: 'ren-suc',
+                name: 'RÈN SỨC',
+                desc: 'Sức khỏe, thăng bằng, phối hợp vận động (Chỉ Video)',
+                color: '#D3543E',
+                items: [
+                    { id: 'keo-co', name: 'Kéo co', desc: 'Sức mạnh tập thể', icon: '🪢', hasGame: false },
+                    { id: 'nhay-day', name: 'Nhảy dây', desc: 'Nhịp điệu & Sức bền', icon: '〰️', hasGame: false },
+                    { id: 'di-ca-kheo', name: 'Đi cà kheo', desc: 'Giữ thăng bằng & Khéo léo', icon: '🎋', hasGame: false }
+                ]
+            },
+            {
+                id: 'ren-kheo',
+                name: 'RÈN KHÉO',
+                desc: 'Khéo léo, phản xạ, phối hợp tay – mắt (Chỉ Video)',
+                color: '#E0A526',
+                items: [
+                    { id: 'banh-dua', name: 'Banh đũa', desc: 'Nhanh tay & Tinh mắt', icon: '🥢', hasGame: false },
+                    { id: 'nem-vong', name: 'Ném vòng', desc: 'Ước lượng & Chuẩn xác', icon: '⭕', hasGame: false }
+                ]
+            },
+            {
+                id: 'doan-ket',
+                name: 'ĐOÀN KẾT',
+                desc: 'Giao tiếp, hợp tác, tin tưởng, làm việc nhóm (Chỉ Video)',
+                color: '#2D6A4F',
+                items: [
+                    { id: 'rong-ran-len-may', name: 'Rồng rắn lên mây', desc: 'Đồng dao & Gắn kết', icon: '🐉', hasGame: false },
+                    { id: 'cuop-co', name: 'Cướp cờ', desc: 'Chiến thuật đồng đội', icon: '🚩', hasGame: false },
+                    { id: 'bit-mat-bat-de', name: 'Bịt mắt bắt dê', desc: 'Lắng nghe & Phối hợp', icon: '🙈', hasGame: false }
+                ]
+            },
+            {
+                id: 'ky-nang-doi',
+                name: 'KỸ NĂNG ĐỘI',
+                desc: 'Suy luận, quan sát, truyền tin, giải quyết vấn đề (Chỉ Game)',
+                color: '#0F2942',
+                items: [
+                    { id: 'giai-mat-thu', name: 'Giải mật thư', desc: 'Giải mã & Suy luận logic', icon: '📜', hasGame: true },
+                    { id: 'semaphore', name: 'Semaphore', desc: 'Truyền tin bằng cờ hiệu', icon: '🏳️', hasGame: true },
+                    { id: 'morse', name: 'Morse', desc: 'Tín hiệu Tích – Tè chuẩn xác', icon: '📡', hasGame: true }
+                ]
+            }
+        ];
+
+        let exhibitionData = {
+            videos: {},
+            games: {}
+        };
+
+        function updateGlobalCounter() {
+            let totalV = Object.keys(exhibitionData.videos).length;
+            let totalG = Object.keys(exhibitionData.games).length;
+            document.getElementById('global-counter').innerText = `Đã nạp: ${totalV}/8 Video • ${totalG}/6 Game`;
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            let html = '';
+
+            categoriesData.forEach(cat => {
+                let totalItems = cat.items.length;
+                let isGameCategory = cat.items[0].hasGame;
+
+                let badgeText = '';
+                let badgeIcon = '';
+                if (isGameCategory) {
+                    let gameCount = cat.items.filter(i => exhibitionData.games[i.id]).length;
+                    badgeText = `Chỉ Game (${gameCount}/${totalItems})`;
+                    badgeIcon = 'fa-gamepad';
+                } else {
+                    let videoCount = cat.items.filter(i => exhibitionData.videos[i.id]).length;
+                    badgeText = `Chỉ Video (${videoCount}/${totalItems})`;
+                    badgeIcon = 'fa-film';
+                }
+
+                html += `
+                <section class="category-frame" style="border-color: #E6D8BE;">
+                    <div onclick="toggleCategory('${cat.id}')" class="p-4 sm:p-5 flex items-stretch gap-4 sm:gap-5 cursor-pointer select-none group">
+                        <div class="accent-pill" style="background-color: ${cat.color};"></div>
+                        <div class="flex-grow flex flex-col justify-center py-0.5">
+                            <div class="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+                                <h2 class="text-lg sm:text-xl font-extrabold uppercase tracking-wide" style="color: ${cat.color};">
+                                    ${cat.name}
+                                </h2>
+                                <span class="text-sm sm:text-base font-bold text-nau-go">
+                                    ${cat.items.map(i => i.name).join('  •  ')}
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-nau-nhat mt-1.5">${cat.desc}</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-end sm:items-center justify-center gap-2 shrink-0">
+                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold border whitespace-nowrap" style="background-color: ${cat.color}15; color: ${cat.color}; border-color: ${cat.color}40;">
+                                <i class="fa-solid ${badgeIcon} mr-1"></i>${badgeText}
+                            </span>
+                            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 bg-giay-do group-hover:bg-giay-dam" style="color: ${cat.color};">
+                                <i class="fa-solid fa-chevron-down text-sm"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-content open">
+                        <div class="accordion-inner">
+                            <div class="px-4 sm:px-6 pb-6 pt-2 border-t border-dashed border-vang-dong/50 bg-[#FAF4E6]/60">
+                                <div class="grid grid-cols-1 md:grid-cols-${cat.items.length === 2 ? '2' : '3'} gap-4 mt-3">
+                `;
+
+                cat.items.forEach(item => {
+                    let actionButtonsHtml = '';
+                    let badgesHtml = '';
+
+                    if (item.hasGame) {
+                        let hasG = !!exhibitionData.games[item.id];
+                        if (hasG) {
+                            actionButtonsHtml = `<button onclick="openStage('${cat.id}', '${item.id}', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: ${cat.color};"><i class="fa-solid fa-gamepad"></i> Chơi Game</button>`;
+                            badgesHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300"><i class="fa-solid fa-circle-check text-amber-600"></i> Sẵn sàng Game</span>`;
+                        } else {
+                            actionButtonsHtml = `<button onclick="startFileSelect('${cat.id}', '${item.id}', 'game')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-amber-600 hover:bg-amber-500 text-white shadow-sm"><i class="fa-solid fa-file-code"></i> + Nạp Game</button>`;
+                            badgesHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-gamepad"></i> Chưa nạp Game</span>`;
+                        }
+                    } else {
+                        let hasVid = !!exhibitionData.videos[item.id];
+                        if (hasVid) {
+                            actionButtonsHtml = `<button onclick="openStage('${cat.id}', '${item.id}', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer text-white shadow-sm hover:brightness-110" style="background-color: ${cat.color};"><i class="fa-solid fa-film"></i> Xem Video Giới Thiệu</button>`;
+                            badgesHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300"><i class="fa-solid fa-circle-check"></i> Đã nạp Video</span>`;
+                        } else {
+                            actionButtonsHtml = `<button onclick="startFileSelect('${cat.id}', '${item.id}', 'video')" class="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white shadow-sm"><i class="fa-solid fa-upload"></i> + Nạp Video Giới Thiệu</button>`;
+                            badgesHtml = `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-stone-100 text-stone-500 border border-stone-200"><i class="fa-solid fa-film"></i> Chưa nạp Video</span>`;
+                        }
+                    }
+
+                    html += `
+                    <div class="subitem-card p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-2.5">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-11 h-11 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-vang-dong/50 bg-giay-do">${item.icon}</span>
+                                    <div>
+                                        <h3 class="font-co-dien font-bold text-lg text-nau-go leading-tight">${item.name}</h3>
+                                        <span class="text-[11px] text-nau-nhat">${item.desc}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 my-3">${badgesHtml}</div>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-vang-dong/30">
+                            ${actionButtonsHtml}
+                        </div>
+                    </div>`;
+                });
+
+                html += `</div></div></div></div></section>`;
+            });
+
+            container.innerHTML = html;
+            updateGlobalCounter();
+        }
+
+        function toggleCategory(catId) {
+            event.currentTarget.nextElementSibling.classList.toggle('open');
+            const chevron = event.currentTarget.querySelector('.fa-chevron-down');
+            if (chevron) chevron.classList.toggle('rotate-180');
+        }
+
+        let activeCatId = '';
+        let activeItemId = '';
+
+        function startFileSelect(catId, itemId, fileType) {
+            activeCatId = catId;
+            activeItemId = itemId;
+
+            const input = document.getElementById('universal-file-input');
+            input.accept = fileType === 'video' ? 'video/*' : '.html,.htm,text/html';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    const result = evt.target.result;
+                    if (fileType === 'video') {
+                        exhibitionData.videos[itemId] = result;
+                        showToast(`Đã nạp thành công Video!`);
+                    } else {
+                        exhibitionData.games[itemId] = result;
+                        showToast(`Đã nạp thành công Game!`);
+                    }
+                    renderCategories();
+                    handleSaveAll(false);
+                };
+                if (fileType === 'video') {
+                    reader.readAsDataURL(file);
+                } else {
+                    reader.readAsText(file, 'utf-8');
+                }
+                input.value = '';
+            };
+            input.click();
+        }
+
+        function openStage(catId, itemId, mode) {
+            activeCatId = catId;
+            activeItemId = itemId;
+
+            let cat = categoriesData.find(c => c.id === catId);
+            let item = cat.items.find(i => i.id === itemId);
+
+            document.getElementById('stage-emoji').innerText = item.icon;
+            document.getElementById('stage-title').innerText = item.name;
+            document.getElementById('stage-cat-badge').innerText = cat.name;
+
+            const videoView = document.getElementById('stage-video-view');
+            const gameView = document.getElementById('stage-game-view');
+            const modeBadge = document.getElementById('stage-mode-badge');
+            const btnReload = document.getElementById('stage-btn-reload');
+
+            if (item.hasGame) {
+                modeBadge.innerHTML = `<i class="fa-solid fa-gamepad"></i><span>Trình Diễn Game</span>`;
+                gameView.classList.remove('hidden');
+                videoView.classList.add('hidden');
+                btnReload.classList.remove('hidden');
+
+                const gameIframe = document.getElementById('stage-game-iframe');
+                const gameEmpty = document.getElementById('stage-game-empty');
+                const gameHtml = exhibitionData.games[activeItemId];
+
+                if (gameHtml) {
+                    gameIframe.classList.remove('hidden');
+                    gameEmpty.classList.add('hidden');
+                    gameIframe.srcdoc = gameHtml;
+                } else {
+                    gameIframe.classList.add('hidden');
+                    gameEmpty.classList.remove('hidden');
+                }
+            } else {
+                modeBadge.innerHTML = `<i class="fa-solid fa-film"></i><span>Video Giới Thiệu</span>`;
+                videoView.classList.remove('hidden');
+                gameView.classList.add('hidden');
+                btnReload.classList.add('hidden');
+
+                const videoPlayer = document.getElementById('stage-video-player');
+                const videoEmpty = document.getElementById('stage-video-empty');
+                const vidData = exhibitionData.videos[activeItemId];
+
+                if (vidData) {
+                    videoPlayer.src = vidData;
+                    videoPlayer.classList.remove('hidden');
+                    videoEmpty.classList.add('hidden');
+                    videoPlayer.play().catch(e => {});
+                } else {
+                    videoPlayer.classList.add('hidden');
+                    videoEmpty.classList.remove('hidden');
+                }
+            }
+
+            document.getElementById('stage-modal').classList.remove('hidden');
+        }
+
+        function triggerDirectUpload(fileType) {
+            closeStageModal();
+            startFileSelect(activeCatId, activeItemId, fileType);
+        }
+
+        function reloadStageGame() {
+            const iframe = document.getElementById('stage-game-iframe');
+            const currentSrcdoc = iframe.srcdoc;
+            iframe.srcdoc = '';
+            setTimeout(() => { iframe.srcdoc = currentSrcdoc; }, 50);
+        }
+
+        function closeStageModal() {
+            const videoPlayer = document.getElementById('stage-video-player');
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            document.getElementById('stage-game-iframe').srcdoc = '';
+            document.getElementById('stage-modal').classList.add('hidden');
+        }
+
+        function toggleStageFullscreen() {
+            const container = document.getElementById('stage-container');
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().catch(err => {});
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function handleSaveAll(showAlert = true) {
+            try {
+                localStorage.setItem('lang_tro_choi_exhibition_data', JSON.stringify(exhibitionData));
+                if (showAlert) {
+                    let totalV = Object.keys(exhibitionData.videos).length;
+                    let totalG = Object.keys(exhibitionData.games).length;
+                    document.getElementById('save-summary-text').innerHTML = `Đã lưu thành công <b class="text-emerald-700">${totalV} Video</b> và <b class="text-amber-700">${totalG} Game</b> vào trình duyệt.`;
+                    document.getElementById('save-summary-modal').classList.remove('hidden');
+                    document.getElementById('save-summary-modal').classList.add('flex');
+                }
+            } catch (e) {
+                alert('Dữ liệu quá lớn để lưu vào trình duyệt. Hãy sử dụng tính năng Xuất File HTML Đóng Gói!');
+            }
+        }
+
+        function closeSaveSummaryModal() {
+            document.getElementById('save-summary-modal').classList.add('hidden');
+            document.getElementById('save-summary-modal').classList.remove('flex');
+        }
+
+        function exportPackagedHtml() {
+            showToast('Đang đóng gói toàn bộ Video & Game vào 1 file HTML duy nhất...');
+            setTimeout(() => {
+                let htmlContent = document.documentElement.outerHTML;
+                const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'Lang_Tro_Choi_Dan_Gian_So_Dong_Goi.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('Đã xuất file HTML đóng gói thành công!');
+            }, 500);
+        }
+
+        function showToast(msg) {
+            const box = document.getElementById('toast-box');
+            document.getElementById('toast-msg').innerText = msg;
+            box.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                box.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+
+        let petalsActive = true;
+        function togglePetals() {
+            petalsActive = !petalsActive;
+            const canvas = document.getElementById('petal-canvas');
+            canvas.style.display = petalsActive ? 'block' : 'none';
+        }
+
+        window.onload = () => {
+            try {
+                const saved = localStorage.getItem('lang_tro_choi_exhibition_data');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.videos) exhibitionData.videos = parsed.videos;
+                    if (parsed.games) exhibitionData.games = parsed.games;
+                }
+            } catch (e) {}
+
+            renderCategories();
+
+            const canvas = document.getElementById('petal-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let petals = [];
+            for (let i = 0; i < 25; i++) {
+                petals.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * 25,
+                    color: Math.random() > 0.5 ? 'rgba(212, 175, 55, 0.6)' : 'rgba(158, 27, 27, 0.4)'
+                });
+            }
+
+            function drawPetals() {
+                if (!petalsActive) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                petals.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, false);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+
+                updatePetals();
+            }
+
+            let angle = 0;
+            function updatePetals() {
+                angle += 0.01;
+                petals.forEach((p, index) => {
+                    p.y += Math.cos(angle + p.d) + 1 + p.r / 3;
+                    p.x += Math.sin(angle) * 1.5;
+
+                    if (p.x > canvas.width + 5 || p.x < -5 || p.y > canvas.height) {
+                        petals[index] = {
+                            x: Math.random() * canvas.width,
+                            y: -10,
+                            r: p.r,
+                            d: p.d,
+                            color: p.color
+                        };
+                    }
+                });
+            }
+
+            setInterval(drawPetals, 33);
+            window.onresize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            };
+        };
+    </script>
+
+</body></html>
